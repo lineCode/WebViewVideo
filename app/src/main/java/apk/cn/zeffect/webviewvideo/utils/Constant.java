@@ -15,4 +15,5 @@ package apk.cn.zeffect.webviewvideo.utils;
 public class Constant {
     public static final String URL_KEY = "url";
     public static final String LAST_TIME_KEY = "lasttime";
+    public static final String RULE_KEY = "rule";
 }
