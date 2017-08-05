@@ -31,8 +31,8 @@ import java.util.List;
  */
 public class KMPAutoComplTextView extends AutoCompleteTextView {
 
-    private static final int DEFAULT_HIGHLIGHT       = Color.parseColor("#FF4081");
-    private static final int DEFAULT_TEXTCOLOR       = Color.parseColor("#80000000");
+    private static final int DEFAULT_HIGHLIGHT = Color.parseColor("#FF4081");
+    private static final int DEFAULT_TEXTCOLOR = Color.parseColor("#80000000");
     private static final int DEFAULT_TEXT_PIXEL_SIZE = 14;
 
     private float mTextSize;
@@ -183,7 +183,7 @@ public class KMPAutoComplTextView extends AutoCompleteTextView {
         public KMPAdapter(Context context, List<String> list) {
             mContext = context;
             mList = new ArrayList<String>();
-            mList.addAll(list);
+            if (list != null) mList.addAll(list);
         }
 
         @Override
@@ -288,8 +288,8 @@ public class KMPAutoComplTextView extends AutoCompleteTextView {
         int j = -1;
         while (i < mode.length - 1) {
             if (j == -1 || mode[i] == mode[j]) {
-                i ++;
-                j ++;
+                i++;
+                j++;
                 if (mode[i] != mode[j]) {
                     next[i] = j;
                 } else {
@@ -319,15 +319,15 @@ public class KMPAutoComplTextView extends AutoCompleteTextView {
         while (i <= sourceArr.length - 1 && j <= modeArr.length - 1) {
             if (isIgnoreCase) {
                 if (j == -1 || sourceArr[i] == modeArr[j] || String.valueOf(sourceArr[i]).equalsIgnoreCase(String.valueOf(modeArr[j]))) {
-                    i ++;
-                    j ++;
+                    i++;
+                    j++;
                 } else {
                     j = next[j];
                 }
             } else {
                 if (j == -1 || sourceArr[i] == modeArr[j]) {
-                    i ++;
-                    j ++;
+                    i++;
+                    j++;
                 } else {
                     j = next[j];
                 }

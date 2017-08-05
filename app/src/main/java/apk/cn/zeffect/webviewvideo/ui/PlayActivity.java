@@ -29,19 +29,19 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play);
+//        setContentView(R.layout.activity_play);
         initView();
     }
 
 
     private void initView() {
-        mVideoPlay = (JCVideoPlayerStandard) findViewById(R.id.video_play);
+        mVideoPlay = new JCVideoPlayerStandard(this);// (JCVideoPlayerStandard) findViewById(R.id.video_play);
         String url = getIntent().getStringExtra(Constant.URL_KEY);
         if (TextUtils.isEmpty(url)) return;
-        mVideoPlay.setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
-//        JCVideoPlayerStandard.startFullscreen(this, JCVideoPlayerStandard.class, url, "");//直接全屏
+//        mVideoPlay.setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "");
+        JCVideoPlayerStandard.startFullscreen(this, JCVideoPlayerStandard.class, url, "");//直接全屏
     }
 
     @Override

@@ -3,11 +3,13 @@ package apk.cn.zeffect.webviewvideo.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -28,6 +31,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -41,6 +45,8 @@ import apk.cn.zeffect.webviewvideo.utils.VideoUrlResolve;
 import apk.cn.zeffect.webviewvideo.utils.WeakAsyncTask;
 import apk.cn.zeffect.webviewvideo.utils.WeakHandler;
 import cn.refactor.kmpautotextview.KMPAutoComplTextView;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 /**
@@ -55,7 +61,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
  * @author zzx
  */
 
-public class WebActivity extends AppCompatActivity implements View.OnClickListener {
+public class WebActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener, KMPAutoComplTextView.OnPopupItemClickListener {
     //    private RelativeLayout mLayout;
     private WebView mWebView;
     private ImageButton mSearchBtn;
@@ -63,6 +69,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     private MaterialProgressBar mProgressBar;
     private ImageButton mMoreBtn;
     private Context mContext;
+    private NestedScrollView mWebScroll;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,6 +82,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 
 
     private void initView() {
+        mWebScroll = (NestedScrollView) findViewById(R.id.web_scroll);
         mMoreBtn = (ImageButton) findViewById(R.id.more_action);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.progress_bar);
         mInputTT = (KMPAutoComplTextView) findViewById(R.id.input_url);
@@ -88,6 +96,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             protected void onPostExecute(WebActivity pActivity, ArrayList<String> pVoid) {
 //                ArrayAdapter<String> adapter = new ArrayAdapter<String>(WebActivity.this, android.R.layout.simple_list_item_1, pVoid);
+                if (pVoid == null) pVoid = new ArrayList<String>();
                 mInputTT.setDatas(pVoid);
             }
         }.execute();
@@ -99,8 +108,21 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         mWebView.addJavascriptInterface(new InJavaScriptLocalObj(mWeakHandler), "java_obj");
         mWebView.setWebViewClient(mWebViewClient);
         mWebView.setWebChromeClient(mWebChromeClient);
-        mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        mWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        // 自适应屏幕
+        mWebView.getSettings().setUseWideViewPort(true);
+        mWebView.getSettings().setLoadWithOverviewMode(true);
+        // 不支持缩放(如果要支持缩放，html页面本身也要支持缩放：不能加user-scalable=no)
+        mWebView.getSettings().setBuiltInZoomControls(false);
+        mWebView.getSettings().setSupportZoom(false);
+        mWebView.getSettings().setDisplayZoomControls(false);
+        // 隐藏scrollbar
+        mWebView.setVerticalScrollBarEnabled(false);
+        mWebView.setHorizontalScrollBarEnabled(false);
         mMoreBtn.setOnClickListener(this);
+        //
+        mInputTT.setOnEditorActionListener(this);
+        mInputTT.setOnPopupItemClickListener(this);
     }
 
     private WeakHandler mWeakHandler = new WeakHandler(new Handler.Callback() {
@@ -128,31 +150,38 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     private void showChoseDialog(final WebActivity webActivity, final ArrayList<String> pResult) {
         if (pResult == null || pResult.size() < 1) return;
         new MaterialDialog.Builder(webActivity)
-                .title("视频连接")
+                .title("视频地址")
                 .items(pResult)
                 .cancelable(false)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         if (which == -1) return true;
-                        gotoPlay(webActivity, text.toString());
+//                        gotoPlay(webActivity, text.toString());
+                        playVideo(text.toString());
                         if (pResult.size() == 1) dialog.dismiss();
                         return false;
                     }
                 })
-                .positiveText("播放")
+//                .neutralText("下载")
                 .negativeText("取消")
                 .canceledOnTouchOutside(false)
                 .show();
     }
 
-    private void gotoPlay(WebActivity webActivity, String url) {
-        if (TextUtils.isEmpty(url)) return;
-        startActivity(new Intent(webActivity, PlayActivity.class).putExtra(Constant.URL_KEY, url));
-    }
+//    private void gotoPlay(WebActivity webActivity, String url) {
+//        if (TextUtils.isEmpty(url)) return;
+//        startActivity(new Intent(webActivity, PlayActivity.class).putExtra(Constant.URL_KEY, url));
+//    }
 
 
     private WebViewClient mWebViewClient = new WebViewClient() {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            mWebScroll.smoothScrollTo(0, 0);
+            super.onPageStarted(view, url, favicon);
+        }
+
         @Override
         public void onPageFinished(WebView view, String url) {
             view.loadUrl("javascript:window.java_obj.getSource('<head>'+" +
@@ -175,9 +204,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.load_url:
-                String url = mInputTT.getText().toString().trim();
-                if (!MoreUtils.isUrl(url)) return;
-                mWebView.loadUrl(url);
+                search("");
                 break;
             case R.id.more_action:
                 showPopView();
@@ -219,9 +246,9 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 }
             });
             //事件监听
-            Button clearCookieBtn = (Button) contentView.findViewById(R.id.clear_cookie);
-            clearCookieBtn.setOnClickListener(this);
+            contentView.findViewById(R.id.clear_cookie).setOnClickListener(this);
             contentView.findViewById(R.id.save_url).setOnClickListener(this);
+            contentView.findViewById(R.id.refresh_url).setOnClickListener(this);
             //
         }
         if (!mPopWindow.isShowing()) mPopWindow.showAsDropDown(mMoreBtn);
@@ -252,6 +279,31 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 
     public static final int HTML_WHAT = 0x64;
 
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (v.getId() == R.id.input_url) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                search("");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void search(String url) {
+        if (TextUtils.isEmpty(url))
+            url = mInputTT.getText().toString().trim();
+        if (!url.startsWith("http://") && !url.startsWith("https://"))
+            url = "http://" + url;
+        mWebView.loadUrl(url);
+        MoreUtils.closeKeyBroad(this);
+    }
+
+    @Override
+    public void onPopupItemClick(CharSequence charSequence) {
+        search(charSequence.toString());
+    }
+
     /**
      * 逻辑处理
      *
@@ -273,13 +325,40 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    private JCVideoPlayerStandard mVideoPlay;
+
+    private void playVideo(String url) {
+        if (mVideoPlay == null) {
+            mVideoPlay = new JCVideoPlayerStandard(this);// (JCVideoPlayerStandard) findViewById(R.id.video_play);
+        }
+        if (TextUtils.isEmpty(url)) return;
+        if (!MoreUtils.isUrl(url)) return;
+        JCVideoPlayerStandard.startFullscreen(this, JCVideoPlayerStandard.class, url, "");//直接全屏
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (JCVideoPlayer.backPress()) {
+            return true;
+        }
         if (mWebView.canGoBack()) {
             mWebView.goBack();
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (JCVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JCVideoPlayer.releaseAllVideos();
     }
 }
