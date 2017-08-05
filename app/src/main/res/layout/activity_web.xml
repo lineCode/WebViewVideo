@@ -1,61 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/web_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/title_layout"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
-        <cn.refactor.kmpautotextview.KMPAutoComplTextView
-            android:id="@+id/input_url"
+        <RelativeLayout
+            android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/load_url"
-            android:completionThreshold="1"
-            android:singleLine="true"
-            app:completionHighlightColor="@color/colorAccent"
-            app:completionIgnoreCase="true"
-            app:completionTextColor="#ffffff"
-            app:completionTextSize="18sp" />
+            android:padding="5dp"
+            app:layout_scrollFlags="scroll">
 
-        <Button
-            android:id="@+id/load_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/more_action"
-            android:text="加载" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/more_action"
+                android:background="@drawable/shape_round_bg"
+                android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/more_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginRight="@dimen/dp10"
-            android:background="@null"
-            android:gravity="center"
-            android:src="@drawable/ic_more_vert_black_24dp" />
-    </RelativeLayout>
+                <cn.refactor.kmpautotextview.KMPAutoComplTextView
+                    android:id="@+id/input_url"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toLeftOf="@+id/space_view"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:completionThreshold="1"
+                    android:hint="URL"
+                    android:paddingLeft="@dimen/dp10"
+                    android:singleLine="true"
+                    android:textColor="@color/like_gray"
+                    android:textCursorDrawable="@null"
+                    app:completionHighlightColor="@color/colorAccent"
+                    app:completionIgnoreCase="true"
+                    app:completionTextColor="#ffffff"
+                    app:completionTextSize="18sp" />
 
-    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-        android:id="@+id/progress_bar"
-        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:layout_below="@id/title_layout"
-        app:mpb_progressStyle="horizontal"
-        app:mpb_progressTint="#00ff00" />
+                <View
+                    android:id="@+id/space_view"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/load_url"
+                    android:background="@color/like_gray"></View>
 
-    <WebView
-        android:id="@+id/web_view"
+                <ImageButton
+                    android:id="@+id/load_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_toLeftOf="@+id/more_action"
+                    android:background="@null"
+                    android:padding="@dimen/dp10"
+                    android:src="@drawable/ic_search_selector" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/more_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp10"
+                android:layout_marginRight="@dimen/dp10"
+                android:background="@null"
+                android:gravity="center"
+                android:src="@drawable/ic_more_vert_black_24dp" />
+        </RelativeLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/progress_bar"></WebView>
+        android:layout_below="@id/appbar"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                app:mpb_progressStyle="horizontal"
+                app:mpb_progressTint="#00ff00" />
+
+            <WebView
+                android:id="@+id/web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></WebView>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>

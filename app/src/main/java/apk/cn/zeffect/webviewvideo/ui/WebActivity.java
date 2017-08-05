@@ -56,9 +56,9 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
  */
 
 public class WebActivity extends AppCompatActivity implements View.OnClickListener {
-    private RelativeLayout mLayout;
+    //    private RelativeLayout mLayout;
     private WebView mWebView;
-    private Button mSearchBtn;
+    private ImageButton mSearchBtn;
     private KMPAutoComplTextView mInputTT;
     private MaterialProgressBar mProgressBar;
     private ImageButton mMoreBtn;
@@ -91,9 +91,9 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 mInputTT.setDatas(pVoid);
             }
         }.execute();
-        mSearchBtn = (Button) findViewById(R.id.load_url);
+        mSearchBtn = (ImageButton) findViewById(R.id.load_url);
         mSearchBtn.setOnClickListener(this);
-        mLayout = (RelativeLayout) findViewById(R.id.web_layout);
+//        mLayout = (RelativeLayout) findViewById(R.id.web_layout);
         mWebView = (WebView) findViewById(R.id.web_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new InJavaScriptLocalObj(mWeakHandler), "java_obj");
@@ -157,6 +157,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         public void onPageFinished(WebView view, String url) {
             view.loadUrl("javascript:window.java_obj.getSource('<head>'+" +
                     "document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+            mInputTT.setText(url);
             super.onPageFinished(view, url);
         }
     };
@@ -175,10 +176,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.load_url:
                 String url = mInputTT.getText().toString().trim();
-                if (TextUtils.isEmpty(url)) return;
-                if (!url.startsWith("http")) return;
-                OrmHelp.save(url);
-                mInputTT.setText("");
+                if (!MoreUtils.isUrl(url)) return;
                 mWebView.loadUrl(url);
                 break;
             case R.id.more_action:
@@ -186,32 +184,51 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.clear_cookie:
                 MoreUtils.clearCookies(mContext);
+                disPopView();
+                break;
+            case R.id.save_url:
+                String url2 = mInputTT.getText().toString().trim();
+                MoreUtils.saveUrl(url2);
+                disPopView();
+                break;
+            case R.id.refresh_url:
+                mWebView.reload();
+                disPopView();
                 break;
         }
     }
 
+    PopupWindow mPopWindow;
+
     private void showPopView() {
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_more_layout, null);
-        PopupWindow popupWindow = new PopupWindow(mContext);
-        popupWindow.setContentView(contentView);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setOutsideTouchable(false);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setTouchable(true);
-        popupWindow.setFocusable(true);
-        backgroundAlpha(mContext, 0.5f);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                backgroundAlpha(mContext, 1f);
-            }
-        });
-        //事件监听
-        Button clearCookieBtn = (Button) contentView.findViewById(R.id.clear_cookie);
-        clearCookieBtn.setOnClickListener(this);
-        //
-        popupWindow.showAsDropDown(mMoreBtn);
+        if (mPopWindow == null) {
+            View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_more_layout, null);
+            mPopWindow = new PopupWindow(mContext);
+            mPopWindow.setContentView(contentView);
+            mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+            mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            mPopWindow.setOutsideTouchable(false);
+            mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+            mPopWindow.setTouchable(true);
+            mPopWindow.setFocusable(true);
+            backgroundAlpha(mContext, 0.5f);
+            mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    backgroundAlpha(mContext, 1f);
+                }
+            });
+            //事件监听
+            Button clearCookieBtn = (Button) contentView.findViewById(R.id.clear_cookie);
+            clearCookieBtn.setOnClickListener(this);
+            contentView.findViewById(R.id.save_url).setOnClickListener(this);
+            //
+        }
+        if (!mPopWindow.isShowing()) mPopWindow.showAsDropDown(mMoreBtn);
+    }
+
+    private void disPopView() {
+        if (mPopWindow != null && mPopWindow.isShowing()) mPopWindow.dismiss();
     }
 
     /**

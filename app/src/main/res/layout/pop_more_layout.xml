@@ -6,8 +6,24 @@
     android:padding="@dimen/dp10">
 
     <Button
+        android:id="@+id/refresh_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刷新"
+        android:textColor="@color/pop_text_color" />
+
+    <Button
         android:id="@+id/clear_cookie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="清除Cookie" />
+        android:text="清除Cookie"
+        android:textColor="@color/pop_text_color" />
+
+    <Button
+        android:id="@+id/save_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="保存网址"
+        android:textColor="@color/pop_text_color" />
+
 </LinearLayout>
