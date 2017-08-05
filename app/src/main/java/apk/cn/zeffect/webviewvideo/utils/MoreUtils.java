@@ -17,10 +17,11 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 
 public class MoreUtils {
-    public static void saveUrl(String url) {
-        if (TextUtils.isEmpty(url)) return;
-        if (!isUrl(url)) return;
-        OrmHelp.save(url);
+    public static boolean saveUrl(String url) {
+        if (TextUtils.isEmpty(url)) return false;
+        if (!isUrl(url)) return false;
+        return OrmHelp.save(url);
+
     }
 
 

@@ -4,10 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import apk.cn.zeffect.webviewvideo.ui.PlayActivity;
 import apk.cn.zeffect.webviewvideo.ui.WebActivity;
-import apk.cn.zeffect.webviewvideo.utils.Constant;
-import apk.cn.zeffect.webviewvideo.utils.VideoUrlResolve;
 
 public class MainActivity extends AppCompatActivity {
 

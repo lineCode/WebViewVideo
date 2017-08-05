@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 
 import apk.cn.zeffect.webviewvideo.R;
 import apk.cn.zeffect.webviewvideo.orm.OrmHelp;
+import apk.cn.zeffect.webviewvideo.ui.regextask.RegexActivity;
 import apk.cn.zeffect.webviewvideo.utils.Constant;
 import apk.cn.zeffect.webviewvideo.utils.MoreUtils;
 import apk.cn.zeffect.webviewvideo.utils.VideoUrlResolve;
@@ -62,7 +65,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
  */
 
 public class WebActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener, KMPAutoComplTextView.OnPopupItemClickListener {
-    //    private RelativeLayout mLayout;
+    private CoordinatorLayout mLayout;
     private WebView mWebView;
     private ImageButton mSearchBtn;
     private KMPAutoComplTextView mInputTT;
@@ -102,7 +105,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         }.execute();
         mSearchBtn = (ImageButton) findViewById(R.id.load_url);
         mSearchBtn.setOnClickListener(this);
-//        mLayout = (RelativeLayout) findViewById(R.id.web_layout);
+        mLayout = (CoordinatorLayout) findViewById(R.id.web_layout);
         mWebView = (WebView) findViewById(R.id.web_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new InJavaScriptLocalObj(mWeakHandler), "java_obj");
@@ -211,19 +214,38 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.clear_cookie:
                 MoreUtils.clearCookies(mContext);
+                Snackbar.make(mLayout, "成功为您清除Cookie，请刷新网页!", Snackbar.LENGTH_SHORT).show();
                 disPopView();
                 break;
             case R.id.save_url:
                 String url2 = mInputTT.getText().toString().trim();
-                MoreUtils.saveUrl(url2);
+                if (MoreUtils.saveUrl(url2))
+                    Snackbar.make(mLayout, "保存成功", Snackbar.LENGTH_SHORT).show();
+                else Snackbar.make(mLayout, "失败了,这好像不是一个能访问的地址", Snackbar.LENGTH_SHORT).show();
                 disPopView();
                 break;
             case R.id.refresh_url:
+                String url3 = mWebView.getUrl();
+                if (TextUtils.isEmpty(url3)) {
+                    Snackbar.make(mLayout, "您好像没有输入地址哦", Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
                 mWebView.reload();
+                Snackbar.make(mLayout, "正在为您刷新，请耐心等待", Snackbar.LENGTH_SHORT).show();
                 disPopView();
+                break;
+            case R.id.go_regex:
+                disPopView();
+                goRegex();
                 break;
         }
     }
+
+    private void goRegex() {
+        Intent intent = new Intent(mContext, RegexActivity.class);
+        startActivity(intent);
+    }
+
 
     PopupWindow mPopWindow;
 
@@ -249,6 +271,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             contentView.findViewById(R.id.clear_cookie).setOnClickListener(this);
             contentView.findViewById(R.id.save_url).setOnClickListener(this);
             contentView.findViewById(R.id.refresh_url).setOnClickListener(this);
+            contentView.findViewById(R.id.go_regex).setOnClickListener(this);
             //
         }
         if (!mPopWindow.isShowing()) mPopWindow.showAsDropDown(mMoreBtn);

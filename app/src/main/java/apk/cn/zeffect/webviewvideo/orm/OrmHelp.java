@@ -24,12 +24,12 @@ import apk.cn.zeffect.webviewvideo.utils.Constant;
  */
 
 public class OrmHelp {
-    public static void save(String url) {
-        if (TextUtils.isEmpty(url)) return;
+    public static boolean save(String url) {
+        if (TextUtils.isEmpty(url)) return false;
         if (OrmUtils.getLiteOrm().queryCount(new QueryBuilder(UrlBean.class).whereEquals(Constant.URL_KEY, url)) > 0) {
             OrmUtils.getLiteOrm().delete(new WhereBuilder(UrlBean.class).andEquals(Constant.URL_KEY, url));
         }
-        OrmUtils.getLiteOrm().save(new UrlBean().setUrl(url).setLastTime(System.currentTimeMillis()));
+        return OrmUtils.getLiteOrm().save(new UrlBean().setUrl(url).setLastTime(System.currentTimeMillis())) > 0;
     }
 
     public static ArrayList<String> getHistory() {
