@@ -2,14 +2,20 @@ package apk.cn.zeffect.webviewvideo.ui.regextask;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 
@@ -54,6 +60,9 @@ public class RegexFragment extends Fragment implements View.OnClickListener {
     private void initView() {
         mView.findViewById(R.id.title_back).setOnClickListener(this);
         ((TextView) mView.findViewById(R.id.title_text)).setText("匹配规则");
+        ImageButton rightBtn = (ImageButton) mView.findViewById(R.id.title_right_action);
+        rightBtn.setImageResource(R.drawable.ic_add_selector);
+        rightBtn.setOnClickListener(this);
         mRegexsView = (RecyclerView) mView.findViewById(R.id.regex_rcv);
         //
         mRegexsView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -64,6 +73,28 @@ public class RegexFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.title_back) {
             getActivity().finish();
+        } else if (v.getId() == R.id.title_right_action) {
+            showInputDialog();
         }
     }
+
+
+    private void showInputDialog() {
+        new MaterialDialog.Builder(mContext)
+                .input("默认输入", "不明白", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        Snackbar.make(mView, input, Snackbar.LENGTH_SHORT).show();
+                    }
+                })
+                .input("默认", "没有内容", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        Snackbar.make(mView, input, Snackbar.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
+    }
+
 }

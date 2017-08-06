@@ -238,6 +238,9 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                 disPopView();
                 goRegex();
                 break;
+            case R.id.exit:
+                this.finish();
+                break;
         }
     }
 
@@ -272,6 +275,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             contentView.findViewById(R.id.save_url).setOnClickListener(this);
             contentView.findViewById(R.id.refresh_url).setOnClickListener(this);
             contentView.findViewById(R.id.go_regex).setOnClickListener(this);
+            contentView.findViewById(R.id.exit).setOnClickListener(this);
             //
         }
         if (!mPopWindow.isShowing()) mPopWindow.showAsDropDown(mMoreBtn);
@@ -316,6 +320,10 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     private void search(String url) {
         if (TextUtils.isEmpty(url))
             url = mInputTT.getText().toString().trim();
+        if (TextUtils.isEmpty(url)) {
+            Snackbar.make(mLayout, "您还没有输入网址！", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         if (!url.startsWith("http://") && !url.startsWith("https://"))
             url = "http://" + url;
         mWebView.loadUrl(url);
@@ -361,12 +369,14 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (JCVideoPlayer.backPress()) {
-            return true;
-        }
-        if (mWebView.canGoBack()) {
-            mWebView.goBack();
-            return true;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (JCVideoPlayer.backPress()) {
+                return true;
+            }
+            if (mWebView.canGoBack()) {
+                mWebView.goBack();
+                return true;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
