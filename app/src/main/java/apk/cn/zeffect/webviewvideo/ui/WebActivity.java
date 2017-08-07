@@ -67,7 +67,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
     private MaterialProgressBar mProgressBar;
     private ImageButton mMoreBtn;
     private Context mContext;
-    private NestedScrollView mWebScroll;
+//    private NestedScrollView mWebScroll;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
 
 
     private void initView() {
-        mWebScroll = (NestedScrollView) findViewById(R.id.web_scroll);
+//        mWebScroll = (NestedScrollView) findViewById(R.id.web_scroll);
         mMoreBtn = (ImageButton) findViewById(R.id.more_action);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.progress_bar);
         mInputTT = (KMPAutoComplTextView) findViewById(R.id.input_url);
@@ -101,7 +101,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
         mSearchBtn = (ImageButton) findViewById(R.id.load_url);
         mSearchBtn.setOnClickListener(this);
         mLayout = (CoordinatorLayout) findViewById(R.id.web_layout);
-        mWebView = (WebView) findViewById(R.id.web_view);
+        mWebView = (WebView) findViewById(R.id.web_scroll);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new InJavaScriptLocalObj(mWeakHandler), "java_obj");
         mWebView.setWebViewClient(mWebViewClient);
@@ -178,6 +178,8 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 //            mWebScroll.smoothScrollTo(0, 0);
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.setProgress(0);
             super.onPageStarted(view, url, favicon);
         }
 
@@ -186,6 +188,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
             view.loadUrl("javascript:window.java_obj.getSource('<head>'+" +
                     "document.getElementsByTagName('html')[0].innerHTML+'</head>');");
             mInputTT.setText(url);
+            mProgressBar.setVisibility(View.INVISIBLE);
             super.onPageFinished(view, url);
         }
     };

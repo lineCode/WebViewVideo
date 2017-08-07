@@ -67,7 +67,7 @@ public class OrmHelp {
 
     public static ArrayList<String> getUrlHistory() {
         ArrayList<String> retuLists = new ArrayList<>();
-        ArrayList<UrlBean> tempBeens = OrmUtils.getLiteOrm().query(new QueryBuilder<>(UrlBean.class).appendOrderDescBy(Constant.LAST_TIME_KEY));
+        ArrayList<UrlBean> tempBeens = OrmUtils.getLiteOrm().query(UrlBean.class);//new QueryBuilder<>(UrlBean.class).appendColumns(new String[]{Constant.LAST_TIME_KEY}).appendOrderDescBy(Constant.LAST_TIME_KEY));
         if (tempBeens != null && tempBeens.isEmpty()) {
             for (UrlBean tempBean : tempBeens) {
                 retuLists.add(tempBean.getUrl());
