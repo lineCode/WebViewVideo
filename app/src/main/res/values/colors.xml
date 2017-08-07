@@ -5,5 +5,5 @@
     <color name="colorAccent">#03A9F4</color>
     <color name="like_gray">#d0c7c8</color>
     <color name="white">#ffffff</color>
-    <color name="pop_text_color">#d0c7c8</color>
+    <color name="pop_text_color">#000000</color>
 </resources>

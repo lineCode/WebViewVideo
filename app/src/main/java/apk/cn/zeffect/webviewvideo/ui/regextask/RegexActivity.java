@@ -1,17 +1,16 @@
 package apk.cn.zeffect.webviewvideo.ui.regextask;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 
 import apk.cn.zeffect.webviewvideo.R;
+import apk.cn.zeffect.webviewvideo.base.BaseActivity;
 
 /**
  * Created by Administrator on 2017/8/5.
  */
 
-public class RegexActivity extends FragmentActivity {
+public class RegexActivity extends BaseActivity {
     private RegexFragment regexFragment;
 
     @Override

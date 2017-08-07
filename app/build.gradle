@@ -33,4 +33,5 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'me.zhanghai.android.materialprogressbar:library:1.4.1'
     compile project(':library')
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

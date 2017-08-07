@@ -40,6 +40,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.ArrayList;
 
 import apk.cn.zeffect.webviewvideo.R;
+import apk.cn.zeffect.webviewvideo.base.BaseActivity;
 import apk.cn.zeffect.webviewvideo.orm.OrmHelp;
 import apk.cn.zeffect.webviewvideo.ui.regextask.RegexActivity;
 import apk.cn.zeffect.webviewvideo.utils.Constant;
@@ -64,7 +65,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
  * @author zzx
  */
 
-public class WebActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener, KMPAutoComplTextView.OnPopupItemClickListener {
+public class WebActivity extends BaseActivity implements View.OnClickListener, TextView.OnEditorActionListener, KMPAutoComplTextView.OnPopupItemClickListener {
     private CoordinatorLayout mLayout;
     private WebView mWebView;
     private ImageButton mSearchBtn;

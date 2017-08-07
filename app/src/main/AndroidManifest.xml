@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:name=".MyApp"
@@ -31,6 +34,10 @@
         <activity
             android:name=".ui.regextask.RegexActivity"
             android:screenOrientation="portrait"></activity>
+
+
+        <meta-data android:value="5987d2888f4a9d04d9000f2f" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="wandoujia" android:name="UMENG_CHANNEL"/>
     </application>
 
 </manifest>
