@@ -6,4 +6,8 @@
     <color name="like_gray">#d0c7c8</color>
     <color name="white">#ffffff</color>
     <color name="pop_text_color">#000000</color>
+    <color name="regex_bg_color">#f1f0f5</color>
+    <color name="regex_title_color">#666666</color>
+    <color name="regex_content_color">#c2bdc2</color>
+    <color name="regex_edit_color">#01b7a8</color>
 </resources>

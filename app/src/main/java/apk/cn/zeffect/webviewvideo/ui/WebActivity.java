@@ -12,10 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.PopupWindowCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,17 +24,14 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import apk.cn.zeffect.webviewvideo.R;
 import apk.cn.zeffect.webviewvideo.base.BaseActivity;
@@ -94,7 +88,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
         new WeakAsyncTask<Void, Void, ArrayList<String>, WebActivity>(this) {
             @Override
             protected ArrayList<String> doInBackground(WebActivity pActivity, Void... params) {
-                return OrmHelp.getHistory();
+                return OrmHelp.getUrlHistory();
             }
 
             @Override
@@ -135,23 +129,24 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
             if (msg.what == HTML_WHAT) {
                 if (msg.obj == null) return true;
                 String html = msg.obj.toString();
-                new WeakAsyncTask<String, Void, ArrayList<String>, WebActivity>(WebActivity.this) {
+                String url = mInputTT.getText().toString().trim();
+                new WeakAsyncTask<String, Void, List<String>, WebActivity>(WebActivity.this) {
                     @Override
-                    protected ArrayList<String> doInBackground(WebActivity pTarget, String... params) {
-                        return VideoUrlResolve.anyURL("", params[0]);
+                    protected List<String> doInBackground(WebActivity pTarget, String... params) {
+                        return VideoUrlResolve.anyURL(params[0], params[1]);
                     }
 
                     @Override
-                    protected void onPostExecute(WebActivity pTarget, ArrayList<String> pResult) {
+                    protected void onPostExecute(WebActivity pTarget, List<String> pResult) {
                         showChoseDialog(pTarget, pResult);
                     }
-                }.execute(html);
+                }.execute(url, html);
             }
             return false;
         }
     });
 
-    private void showChoseDialog(final WebActivity webActivity, final ArrayList<String> pResult) {
+    private void showChoseDialog(final WebActivity webActivity, final List<String> pResult) {
         if (pResult == null || pResult.size() < 1) return;
         new MaterialDialog.Builder(webActivity)
                 .title("视频地址")
@@ -182,7 +177,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
     private WebViewClient mWebViewClient = new WebViewClient() {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            mWebScroll.smoothScrollTo(0, 0);
+//            mWebScroll.smoothScrollTo(0, 0);
             super.onPageStarted(view, url, favicon);
         }
 
@@ -226,6 +221,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
                 disPopView();
                 break;
             case R.id.refresh_url:
+                disPopView();
                 String url3 = mWebView.getUrl();
                 if (TextUtils.isEmpty(url3)) {
                     Snackbar.make(mLayout, "您好像没有输入地址哦", Snackbar.LENGTH_SHORT).show();
@@ -233,7 +229,6 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
                 }
                 mWebView.reload();
                 Snackbar.make(mLayout, "正在为您刷新，请耐心等待", Snackbar.LENGTH_SHORT).show();
-                disPopView();
                 break;
             case R.id.go_regex:
                 disPopView();
@@ -247,6 +242,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
 
     private void goRegex() {
         Intent intent = new Intent(mContext, RegexActivity.class);
+        intent.putExtra(Constant.URL_KEY, mInputTT.getText().toString().trim());
         startActivity(intent);
     }
 
@@ -264,7 +260,6 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
             mPopWindow.setBackgroundDrawable(new BitmapDrawable());
             mPopWindow.setTouchable(true);
             mPopWindow.setFocusable(true);
-            backgroundAlpha(mContext, 0.5f);
             mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {
@@ -279,7 +274,10 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
             contentView.findViewById(R.id.exit).setOnClickListener(this);
             //
         }
-        if (!mPopWindow.isShowing()) mPopWindow.showAsDropDown(mMoreBtn);
+        if (!mPopWindow.isShowing()) {
+            backgroundAlpha(mContext, 0.5f);
+            mPopWindow.showAsDropDown(mMoreBtn);
+        }
     }
 
     private void disPopView() {

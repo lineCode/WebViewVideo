@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="@dimen/dp10">
+
+    <EditText
+        android:id="@+id/lri_input_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="请输入网址"
+        android:lines="1"/>
+
+    <EditText
+        android:id="@+id/lri_input_regex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="请输入匹配规则"
+        android:lines="1"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp10"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="在线正则表达式测试："/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:text="http://tool.oschina.net/regex/"/>
+    </LinearLayout>
+
+</LinearLayout>

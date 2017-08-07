@@ -1,6 +1,7 @@
 package apk.cn.zeffect.webviewvideo.bean;
 
 import com.litesuits.orm.db.annotation.Column;
+import com.litesuits.orm.db.annotation.Ignore;
 import com.litesuits.orm.db.annotation.Table;
 
 import apk.cn.zeffect.webviewvideo.utils.Constant;
@@ -16,6 +17,20 @@ public class Rule {
     private String url;
     @Column(Constant.RULE_KEY)
     private String rule;
+    /**
+     * 用于标记当前条是否处在修改状态
+     */
+    @Ignore
+    private boolean inEdit = false;
+
+    public boolean isInEdit() {
+        return inEdit;
+    }
+
+    public Rule setInEdit(boolean pInEdit) {
+        inEdit = pInEdit;
+        return this;
+    }
 
     public int getId() {
         return id;
