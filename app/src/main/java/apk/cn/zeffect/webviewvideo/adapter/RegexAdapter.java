@@ -52,8 +52,8 @@ public class RegexAdapter extends RecyclerView.Adapter<RegexAdapter.MyHolder> {
         holder.regex.setEnabled(tempRule.isInEdit() ? true : false);
         holder.regex.setBackgroundResource(tempRule.isInEdit() ? R.drawable.shape_fouced_bg : R.drawable.shape_round_bg);
         holder.regex.setTextColor(tempRule.isInEdit() ? ContextCompat.getColor(mContext, R.color.regex_edit_color) : ContextCompat.getColor(mContext, R.color.regex_content_color));
-        holder.changeBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
-        holder.saveBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
+//        holder.changeBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
+//        holder.saveBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
         holder.delBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
     }
 
@@ -72,7 +72,7 @@ public class RegexAdapter extends RecyclerView.Adapter<RegexAdapter.MyHolder> {
             url = (TextView) itemView.findViewById(R.id.ir_url_tv);
             regex = (EditText) itemView.findViewById(R.id.ir_regex_et);
             changeBtn = (Button) itemView.findViewById(R.id.ir_change_btn);
-            saveBtn = (Button) itemView.findViewById(R.id.ir_save_btn);
+//            saveBtn = (Button) itemView.findViewById(R.id.ir_save_btn);
             delBtn = (Button) itemView.findViewById(R.id.ir_del_btn);
         }
     }
@@ -102,17 +102,17 @@ public class RegexAdapter extends RecyclerView.Adapter<RegexAdapter.MyHolder> {
                     vAdapter.notifyItemChanged(vPosition);
                     Snackbar.make(mView, "正处于编辑模式，可直接对匹配规则进行修改，修改后请点击保存按钮。", Snackbar.LENGTH_SHORT).show();
                     break;
-                case R.id.ir_save_btn:
-                    if (!vRule.isInEdit()) {
-                        return;
-                    }
-                    vRule.setInEdit(false);
-                    vRule.setRule(vHolder.regex.getText().toString().trim());
-                    OrmHelp.delRule(vRule);//删除旧的，保存新的
-                    OrmHelp.saveRule(vRule);
-                    vAdapter.notifyItemChanged(vPosition);
-                    Snackbar.make(mView, "保存成功", Snackbar.LENGTH_SHORT).show();
-                    break;
+//                case R.id.ir_save_btn:
+//                    if (!vRule.isInEdit()) {
+//                        return;
+//                    }
+//                    vRule.setInEdit(false);
+//                    vRule.setRule(vHolder.regex.getText().toString().trim());
+//                    OrmHelp.delRule(vRule);//删除旧的，保存新的
+//                    OrmHelp.saveRule(vRule);
+//                    vAdapter.notifyItemChanged(vPosition);
+//                    Snackbar.make(mView, "保存成功", Snackbar.LENGTH_SHORT).show();
+//                    break;
                 case R.id.ir_del_btn:
                     new MaterialDialog.Builder(vAdapter.mContext)
                             .title("删除确认")

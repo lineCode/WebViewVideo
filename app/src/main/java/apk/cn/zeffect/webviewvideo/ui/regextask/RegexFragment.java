@@ -1,6 +1,7 @@
 package apk.cn.zeffect.webviewvideo.ui.regextask;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,9 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,7 @@ import apk.cn.zeffect.webviewvideo.adapter.RegexAdapter;
 import apk.cn.zeffect.webviewvideo.bean.Rule;
 import apk.cn.zeffect.webviewvideo.orm.OrmHelp;
 import apk.cn.zeffect.webviewvideo.orm.OrmUtils;
+import apk.cn.zeffect.webviewvideo.ui.addregextask.AddTaskActivity;
 import apk.cn.zeffect.webviewvideo.utils.Constant;
 import apk.cn.zeffect.webviewvideo.utils.MoreUtils;
 import apk.cn.zeffect.webviewvideo.utils.VideoUrlResolve;
@@ -49,6 +54,7 @@ public class RegexFragment extends Fragment implements View.OnClickListener {
      * 正在访问的地址
      */
     private String mCallUrl;
+    private SmartRefreshLayout mRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +77,7 @@ public class RegexFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView() {
+        mRefreshLayout = (SmartRefreshLayout) mView.findViewById(R.id.refresh_layout);
         mView.findViewById(R.id.title_back).setOnClickListener(this);
         ((TextView) mView.findViewById(R.id.title_text)).setText("匹配规则");
         ImageButton rightBtn = (ImageButton) mView.findViewById(R.id.title_right_action);
@@ -80,6 +87,14 @@ public class RegexFragment extends Fragment implements View.OnClickListener {
         //
         mRegexsView.setLayoutManager(new LinearLayoutManager(mContext));
         mRegexsView.setAdapter(mAdapter);
+        //
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                addAllRules();
+                refreshlayout.finishRefresh(500);
+            }
+        });
     }
 
     @Override
@@ -87,9 +102,17 @@ public class RegexFragment extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.title_back) {
             getActivity().finish();
         } else if (v.getId() == R.id.title_right_action) {
-            showInputDialog();
+            goAddRegex(false);
+//            showInputDialog();
         }
     }
+
+    private void goAddRegex(boolean isUpdate) {
+        Intent tempIntent = new Intent(mContext, AddTaskActivity.class);
+        tempIntent.putExtra(Constant.IS_UPDATE_KEY, isUpdate);
+        startActivity(tempIntent);
+    }
+
 
     /***
      * 添加本地所有策略

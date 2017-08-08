@@ -2,4 +2,7 @@
 <resources>
     <dimen name="dp10">10dp</dimen>
     <dimen name="dp48">48dp</dimen>
+    <dimen name="dp5">5dp</dimen>
+    <dimen name="sp12">12sp</dimen>
+    <dimen name="dp60">60dp</dimen>
 </resources>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/regex_bg_color"
+              android:orientation="vertical">
+
+    <include layout="@layout/layout_title"></include>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp10">
+
+            <EditText
+                android:id="@+id/lri_input_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_round_bg"
+                android:hint="请输入网址"
+                android:lines="1"
+                android:padding="@dimen/dp10"
+                android:textColor="@color/regex_title_color"
+                android:textColorHint="@color/regex_title_color"/>
+
+            <!--<EditText-->
+            <!--android:id="@+id/lri_input_regex"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/dp5"-->
+            <!--android:background="@drawable/shape_round_bg"-->
+            <!--android:hint="请输入匹配规则"-->
+            <!--android:maxLines="3"-->
+            <!--android:minHeight="@dimen/dp48"-->
+            <!--android:padding="@dimen/dp10"-->
+            <!--android:textColor="@color/regex_title_color"-->
+            <!--android:textColorHint="@color/regex_title_color"/>-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/regexs_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:minHeight="@dimen/dp48"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/add_regex_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_add_selector"
+                    android:text="添加规则"/>
+
+                <Button
+                    android:id="@+id/join_regex_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_add_selector"
+                    android:text="添加字符串"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:text="说明：长按选项或按住右方按钮可进行拖拽排序，向左滑动可以删除当前项。\n最终的访问地址为列表顺序拼接起来的地址。\n添加说明：当页面需要多个匹配规则才能得到结果时，可以选择添加规则。\n拼接说明：当页面获取结果之后，还要拼接固定值才能访问时，可以进行拼接。"
+                android:textColor="@color/regex_title_color"
+                android:textSize="@dimen/sp12"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:text="匹配原理：当访问包含输入网址的地址时，使用用户输入的规则进行匹配值。用户可以使用此值进行一些拼接得到视频的播放地址。"
+                android:textColor="@color/regex_title_color"
+                android:textSize="@dimen/sp12"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:text="在线正则表达式测试："
+                android:textColor="@color/regex_title_color"
+                android:textSize="@dimen/sp12"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:autoLink="web"
+                android:text="http://tool.oschina.net/regex/"
+                />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

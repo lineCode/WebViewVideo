@@ -51,6 +51,7 @@ public class OrmUtils {
         if (pContext != null) {
             DataBaseConfig defaultConfig = new DataBaseConfig(pContext.getApplicationContext(), dbName);
             liteOrm = LiteOrm.newSingleInstance(defaultConfig);
+            liteOrm.setDebugged(true);
         }
     }
 }

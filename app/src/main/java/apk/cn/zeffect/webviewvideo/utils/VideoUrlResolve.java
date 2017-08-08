@@ -2,8 +2,12 @@ package apk.cn.zeffect.webviewvideo.utils;
 
 import android.text.TextUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,16 +36,30 @@ public class VideoUrlResolve {
         if (urls == null || urls.isEmpty()) return Collections.emptyList();
         List<Rule> rules = OrmHelp.getRules(urls.get(0));
         if (rules == null || rules.isEmpty()) return Collections.emptyList();
-        ArrayList<String> tempList = new ArrayList<>();
-        for (int i = 0; i < rules.size(); i++) {
-            String regex = rules.get(i).getRule();
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(html);
-            while (matcher.find()) {
-                tempList.add(matcher.group(1));
+        List<String> joinUrls = new ArrayList<>();
+        try {
+            for (int i = 0; i < rules.size(); i++) {
+                String regexs = rules.get(i).getRule();
+                String joinString = rules.get(i).getJoin();
+                JSONArray regexArray = new JSONArray(regexs);
+                for (int j = 0; j < regexArray.length(); j++) {
+                    String regex = (String) regexArray.get(j);
+                    if (joinString.contains(regex)) {
+                        Pattern pattern = Pattern.compile(regex);
+                        Matcher matcher = pattern.matcher(html);
+                        while (matcher.find()) {
+                            String tempJoinUrl = joinString.replace(regex, matcher.group(1));
+                            joinUrls.add(tempJoinUrl);
+                        }
+                        joinString = joinString.replace(regex, "");
+                    }
+                }
             }
+        } catch (JSONException pE) {
+            pE.printStackTrace();
+        } finally {
+            return joinUrls;
         }
-        return tempList;
     }
 
 

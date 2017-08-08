@@ -60,8 +60,7 @@ public class OrmHelp {
         if (OrmUtils.getLiteOrm().queryCount(new QueryBuilder(Rule.class).whereEquals(Constant.URL_KEY, url).whereAppendAnd().whereEquals(Constant.RULE_KEY, regex)) > 0) {
             return false;
         }
-        OrmUtils.getLiteOrm().save(new Rule().setUrl(url).setRule(regex));
-        return true;
+        return OrmUtils.getLiteOrm().save(pRule) > 0;
     }
 
 

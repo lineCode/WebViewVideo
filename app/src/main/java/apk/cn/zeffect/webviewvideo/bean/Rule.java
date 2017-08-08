@@ -22,6 +22,17 @@ public class Rule {
      */
     @Ignore
     private boolean inEdit = false;
+    @Column(Constant.COL_JOIN_KEY)
+    private String col_join;
+
+    public String getJoin() {
+        return col_join;
+    }
+
+    public Rule setJoin(String pJoin) {
+        col_join = pJoin;
+        return this;
+    }
 
     public boolean isInEdit() {
         return inEdit;
