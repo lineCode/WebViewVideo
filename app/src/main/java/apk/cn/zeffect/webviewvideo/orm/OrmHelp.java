@@ -51,6 +51,11 @@ public class OrmHelp {
         return OrmUtils.getLiteOrm().delete(new WhereBuilder(Rule.class).andEquals(Constant.ID_KEY, id)) > 0;
     }
 
+    public static boolean delRule(int id) {
+        if (id == -1) return false;
+        return OrmUtils.getLiteOrm().delete(new WhereBuilder(Rule.class).andEquals(Constant.ID_KEY, id)) > 0;
+    }
+
 
     public static boolean saveRule(Rule pRule) {
         if (pRule == null) return false;
@@ -67,7 +72,7 @@ public class OrmHelp {
     public static ArrayList<String> getUrlHistory() {
         ArrayList<String> retuLists = new ArrayList<>();
         ArrayList<UrlBean> tempBeens = OrmUtils.getLiteOrm().query(UrlBean.class);//new QueryBuilder<>(UrlBean.class).appendColumns(new String[]{Constant.LAST_TIME_KEY}).appendOrderDescBy(Constant.LAST_TIME_KEY));
-        if (tempBeens != null && tempBeens.isEmpty()) {
+        if (tempBeens != null && !tempBeens.isEmpty()) {
             for (UrlBean tempBean : tempBeens) {
                 retuLists.add(tempBean.getUrl());
             }

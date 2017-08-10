@@ -60,12 +60,17 @@ public class FragmentAddTask extends Fragment implements View.OnClickListener, O
     private JoinAdapter mAdapter;
     private ItemTouchHelper mItemTouchHelper;
     private EditText mInputUrl;
+    private String mCallUrl = "";
+    private int mUpdateId = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mContext = getContext();
         mIsUpdate = getArguments().getBoolean(Constant.IS_UPDATE_KEY, false);
+        mCallUrl = getArguments().getString(Constant.URL_KEY);
+        if (mCallUrl == null) mCallUrl = "";
+        mUpdateId = getArguments().getInt(Constant.ID_KEY, -1);
         mAdapter = new JoinAdapter(mContext, mRegexs, this);
     }
 
@@ -88,6 +93,15 @@ public class FragmentAddTask extends Fragment implements View.OnClickListener, O
         mAddBtn = (Button) mView.findViewById(R.id.add_regex_btn);
         mJoinBtn = (Button) mView.findViewById(R.id.join_regex_btn);
         mInputUrl = (EditText) mView.findViewById(R.id.lri_input_url);
+        if (!TextUtils.isEmpty(mCallUrl)) {
+            if (mCallUrl.startsWith("http://") || mCallUrl.startsWith("https://")) {
+                List<String> tempurl = VideoUrlResolve.regexUrl(mCallUrl);
+                if (tempurl != null && !tempurl.isEmpty()) {
+                    mCallUrl = tempurl.get(0);
+                }
+            } else ;
+            mInputUrl.setText(mCallUrl);
+        }
         mRegexsRV = (RecyclerView) mView.findViewById(R.id.regexs_rv);
         mRegexsRV.setLayoutManager(new LinearLayoutManager(mContext));
         mRegexsRV.setAdapter(mAdapter);
@@ -156,6 +170,7 @@ public class FragmentAddTask extends Fragment implements View.OnClickListener, O
                         tempRule.setJoin(urlBuild.toString())
                                 .setRule(regexArray.toString())
                                 .setUrl(regexUrl);
+                        if (mUpdateId != -1) OrmHelp.delRule(mUpdateId);
                         if (OrmHelp.saveRule(tempRule)) {
                             Snackbar.make(mView, "保存成功", Snackbar.LENGTH_SHORT).show();
                         }

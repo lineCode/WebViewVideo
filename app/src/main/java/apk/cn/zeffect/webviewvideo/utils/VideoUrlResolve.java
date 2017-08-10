@@ -80,9 +80,9 @@ public class VideoUrlResolve {
 
     }
 
-    public static final String REGEX_HTTP_URL = "http://(.+?)/";
+    public static final String REGEX_HTTP_URL = "http://(.*?)/";
 
-    public static final String REGEX_HTTPS_URL = "https://(.+?)/";
+    public static final String REGEX_HTTPS_URL = "https://(.*?)/";
 
     /***
      * 正则匹配

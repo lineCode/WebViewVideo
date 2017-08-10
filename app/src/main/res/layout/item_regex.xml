@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/item_top"
@@ -18,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="网址"
             android:textColor="@color/regex_title_color"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/ir_regex_et"
@@ -26,11 +25,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp10"
             android:background="@drawable/shape_round_bg"
+            android:enabled="false"
             android:maxLines="3"
             android:minHeight="@dimen/dp48"
             android:paddingLeft="@dimen/dp10"
             android:text="123456"
-            android:textColor="@color/regex_content_color"/>
+            android:textColor="@color/regex_content_color" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,7 +49,7 @@
             android:drawableLeft="@drawable/ic_edit_slt"
             android:gravity="center_vertical"
             android:text="修改"
-            android:textColor="@color/regex_title_color"/>
+            android:textColor="@color/regex_title_color" />
 
         <Button
             android:id="@+id/ir_del_btn"
@@ -60,7 +60,7 @@
             android:drawableLeft="@drawable/ic_delete_slt"
             android:gravity="center_vertical"
             android:text="删除"
-            android:textColor="@color/regex_title_color"/>
+            android:textColor="@color/regex_title_color" />
     </LinearLayout>
 
     <LinearLayout

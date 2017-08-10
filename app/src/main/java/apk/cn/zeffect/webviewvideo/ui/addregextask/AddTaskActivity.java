@@ -30,6 +30,8 @@ public class AddTaskActivity extends BaseActivity {
         if (mAddTaskFm == null) mAddTaskFm = new FragmentAddTask();
         Bundle bundle = new Bundle();
         bundle.putBoolean(Constant.IS_UPDATE_KEY, getIntent().getBooleanExtra(Constant.IS_UPDATE_KEY, false));
+        bundle.putString(Constant.URL_KEY, getIntent().getStringExtra(Constant.URL_KEY));
+        bundle.putInt(Constant.ID_KEY, getIntent().getIntExtra(Constant.ID_KEY, -1));
         mAddTaskFm.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.far_root_layout, mAddTaskFm).show(mAddTaskFm).commit();
     }

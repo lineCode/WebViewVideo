@@ -22,6 +22,8 @@ import apk.cn.zeffect.webviewvideo.R;
 import apk.cn.zeffect.webviewvideo.bean.Rule;
 import apk.cn.zeffect.webviewvideo.orm.OrmHelp;
 import apk.cn.zeffect.webviewvideo.orm.OrmUtils;
+import apk.cn.zeffect.webviewvideo.ui.WebActivity;
+import apk.cn.zeffect.webviewvideo.ui.regextask.RegexFragment;
 import apk.cn.zeffect.webviewvideo.utils.Constant;
 
 /**
@@ -32,7 +34,6 @@ public class RegexAdapter extends RecyclerView.Adapter<RegexAdapter.MyHolder> {
     private Context mContext;
     private List<Rule> mRules;
     private View mView;
-
 
     public RegexAdapter(Context pContext, List<Rule> pList) {
         this.mContext = pContext;
@@ -49,10 +50,10 @@ public class RegexAdapter extends RecyclerView.Adapter<RegexAdapter.MyHolder> {
         Rule tempRule = mRules.get(position);
         holder.url.setText("网址：" + tempRule.getUrl());
         holder.regex.setText(tempRule.getRule());
-        holder.regex.setEnabled(tempRule.isInEdit() ? true : false);
-        holder.regex.setBackgroundResource(tempRule.isInEdit() ? R.drawable.shape_fouced_bg : R.drawable.shape_round_bg);
-        holder.regex.setTextColor(tempRule.isInEdit() ? ContextCompat.getColor(mContext, R.color.regex_edit_color) : ContextCompat.getColor(mContext, R.color.regex_content_color));
-//        holder.changeBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
+//        holder.regex.setEnabled(tempRule.isInEdit() ? true : false);
+//        holder.regex.setBackgroundResource(tempRule.isInEdit() ? R.drawable.shape_fouced_bg : R.drawable.shape_round_bg);
+//        holder.regex.setTextColor(tempRule.isInEdit() ? ContextCompat.getColor(mContext, R.color.regex_edit_color) : ContextCompat.getColor(mContext, R.color.regex_content_color));
+        holder.changeBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
 //        holder.saveBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
         holder.delBtn.setOnClickListener(new ViewOnClick(this, holder, tempRule, position));
     }
@@ -95,12 +96,7 @@ public class RegexAdapter extends RecyclerView.Adapter<RegexAdapter.MyHolder> {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.ir_change_btn:
-                    if (vRule.isInEdit()) {
-                        return;
-                    }
-                    vRule.setInEdit(true);
-                    vAdapter.notifyItemChanged(vPosition);
-                    Snackbar.make(mView, "正处于编辑模式，可直接对匹配规则进行修改，修改后请点击保存按钮。", Snackbar.LENGTH_SHORT).show();
+                    RegexFragment.goAddRegex(mContext, vRule.getUrl(), true, vRule.getId());
                     break;
 //                case R.id.ir_save_btn:
 //                    if (!vRule.isInEdit()) {

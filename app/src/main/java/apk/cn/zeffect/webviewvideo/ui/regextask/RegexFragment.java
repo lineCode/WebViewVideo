@@ -108,9 +108,15 @@ public class RegexFragment extends Fragment implements View.OnClickListener {
     }
 
     private void goAddRegex(boolean isUpdate) {
-        Intent tempIntent = new Intent(mContext, AddTaskActivity.class);
+        goAddRegex(mContext, mCallUrl, isUpdate, -1);
+    }
+
+    public static void goAddRegex(Context pContext, String url, boolean isUpdate, int id) {
+        Intent tempIntent = new Intent(pContext, AddTaskActivity.class);
         tempIntent.putExtra(Constant.IS_UPDATE_KEY, isUpdate);
-        startActivity(tempIntent);
+        tempIntent.putExtra(Constant.URL_KEY, url);
+        tempIntent.putExtra(Constant.ID_KEY, id);
+        pContext.startActivity(tempIntent);
     }
 
 

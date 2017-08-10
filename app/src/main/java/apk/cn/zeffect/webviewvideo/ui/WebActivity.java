@@ -36,6 +36,7 @@ import java.util.List;
 import apk.cn.zeffect.webviewvideo.R;
 import apk.cn.zeffect.webviewvideo.base.BaseActivity;
 import apk.cn.zeffect.webviewvideo.orm.OrmHelp;
+import apk.cn.zeffect.webviewvideo.orm.OrmUtils;
 import apk.cn.zeffect.webviewvideo.ui.regextask.RegexActivity;
 import apk.cn.zeffect.webviewvideo.utils.Constant;
 import apk.cn.zeffect.webviewvideo.utils.MoreUtils;
@@ -81,6 +82,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
 
     private void initView() {
 //        mWebScroll = (NestedScrollView) findViewById(R.id.web_scroll);
+        OrmUtils.defaultInit(getApplicationContext());
         mMoreBtn = (ImageButton) findViewById(R.id.more_action);
         mProgressBar = (MaterialProgressBar) findViewById(R.id.progress_bar);
         mInputTT = (KMPAutoComplTextView) findViewById(R.id.input_url);
@@ -156,9 +158,10 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         if (which == -1) return true;
+                        dialog.dismiss();
 //                        gotoPlay(webActivity, text.toString());
                         playVideo(text.toString());
-                        if (pResult.size() == 1) dialog.dismiss();
+//                        if (pResult.size() == 1) dialog.dismiss();
                         return false;
                     }
                 })
