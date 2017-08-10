@@ -243,6 +243,10 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
             case R.id.exit:
                 this.finish();
                 break;
+            case R.id.user_use:
+                mWebView.loadUrl("https://github.com/xuanu/WebViewVideo/blob/master/Doc/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md");
+                disPopView();
+                break;
         }
     }
 
@@ -278,6 +282,7 @@ public class WebActivity extends BaseActivity implements View.OnClickListener, T
             contentView.findViewById(R.id.refresh_url).setOnClickListener(this);
             contentView.findViewById(R.id.go_regex).setOnClickListener(this);
             contentView.findViewById(R.id.exit).setOnClickListener(this);
+            contentView.findViewById(R.id.user_use).setOnClickListener(this);
             //
         }
         if (!mPopWindow.isShowing()) {
