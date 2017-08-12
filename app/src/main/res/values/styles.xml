@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--<style name="SplashTheme" parent="AppTheme">-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <!--&lt;!&ndash;<item name="windowBackground">@drawable/ic_add_black_normal_24dp</item>&ndash;&gt;-->
+    <!--</style>-->
+
 </resources>
